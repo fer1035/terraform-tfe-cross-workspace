@@ -10,10 +10,11 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
 ## Prerequisites
 
-- An existing Organization
-- An existing Variable Set
-- An existing Team (the default is **owners**)
+- An existing Organization.
+- An existing Variable Set.
+- An existing Team (the default is **owners**).
 - An existing Workspace in which to run the module.
+- A **TFE_TOKEN** environment variable in the existing Workspace with sufficient privileges to manage all of the components described here.
 
 ## What The Module Creates
 
