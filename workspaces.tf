@@ -1,21 +1,19 @@
-data "tfe_team" "team" {
-  name         = var.team_name
-  organization = var.org_name
-}
-
 resource "tfe_workspace" "workspace_0" {
   name         = var.workspace_0_name
   organization = var.org_name
+  project_id   = tfe_project.project.id
 }
 
 resource "tfe_workspace" "workspace_1" {
   name         = var.workspace_1_name
   organization = var.org_name
+  project_id   = tfe_project.project.id
 }
 
 resource "tfe_workspace" "workspace_2" {
   name         = var.workspace_2_name
   organization = var.org_name
+  project_id   = tfe_project.project.id
 }
 
 resource "tfe_team_access" "workspace_0_access" {
