@@ -6,7 +6,7 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
 ## Workflow
 
-![Full design workflow](./images/cross_workspace.png "Full design workflow")
+![Full design workflow](https://raw.githubusercontent.com/fer1035/terraform-tfe-cross-workspace/main/images/cross_workspace.png "Full design workflow")
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
 ## How To Use The Module In Your Organization
 
-- Fork the source repository for this module.
+- Fork the [source repository](https://github.com/fer1035/terraform-tfe-cross-workspace) for this module.
 - Publish the Module in your Registry using the new repository as the source.
 
 ---
