@@ -68,17 +68,14 @@ No modules.
 | [tfe_workspace.workspace_2](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/workspace) | resource |
 | [tfe_team.team](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/data-sources/team) | data source |
 | [tfe_variable_set.variable_set](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/data-sources/variable_set) | data source |
-| [tfe_workspace.workspace_0](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/data-sources/workspace) | data source |
-| [tfe_workspace.workspace_1](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/data-sources/workspace) | data source |
-| [tfe_workspace.workspace_2](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/data-sources/workspace) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_org_name"></a> [org\_name](#input\_org\_name) | Name of an existing organization to use. | `string` | n/a | yes |
-| <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Name of the project to create and / or manage. | `string` | n/a | yes |
-| <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Name of an existing team to assign to the workspaces. | `string` | `"owners"` | no |
+| <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Name of the project to create and / or manage. Only a-z, A-Z, and 0-9 are allowed for the project name, beginning with a letter. | `string` | n/a | yes |
+| <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Name of an existing team to assign to the workspaces. The default "owners" team does not need Team Access assignment, and this condition has been configured automatically in the code. | `string` | `"owners"` | no |
 | <a name="input_varset_name"></a> [varset\_name](#input\_varset\_name) | Name of an existing Variable Set to use. | `string` | n/a | yes |
 | <a name="input_workspace_0_name"></a> [workspace\_0\_name](#input\_workspace\_0\_name) | Name of the 0th workspace to create and / or manage. | `string` | n/a | yes |
 | <a name="input_workspace_1_name"></a> [workspace\_1\_name](#input\_workspace\_1\_name) | Name of the 1st workspace to create and / or manage. | `string` | n/a | yes |
