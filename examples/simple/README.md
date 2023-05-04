@@ -31,7 +31,7 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
 - Fork the [source repository](https://github.com/fer1035/terraform-tfe-cross-workspace) for this module.
 - Publish the Module in your Registry using the new repository as the source.
-- Use the sample code in [examples](https://github.com/fer1035/terraform-tfe-cross-workspace/tree/main/examples) to call the module and create the resources.
+- Customize the sample code in [examples](https://github.com/fer1035/terraform-tfe-cross-workspace/tree/main/examples) to call the module and create the resources.
 
 ---
 
