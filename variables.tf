@@ -13,19 +13,21 @@ variable "project_name" {
   description = "Name of the Project to create and / or manage."
 }
 
-variable "workspace_0_name" {
-  type        = string
-  description = "Name of the 0th Workspace to create and / or manage."
-}
+variable "workspace_configurations" {
+  type        = map(any)
+  description = "Names and triggers of the Workspaces to create and / or manage."
 
-variable "workspace_1_name" {
-  type        = string
-  description = "Name of the 1st Workspace to create and / or manage."
-}
-
-variable "workspace_2_name" {
-  type        = string
-  description = "Name of the 2nd Workspace to create and / or manage."
+  default = {
+    workspace_0 = {
+      trigger_source = null
+    }
+    workspace_1 = {
+      trigger_source = "workspace_0"
+    }
+    workspace_2 = {
+      trigger_source = "workspace_1"
+    }
+  }
 }
 
 variable "team_name" {

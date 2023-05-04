@@ -21,7 +21,7 @@ resource "tfe_project_variable_set" "project_variable_set" {
 resource "tfe_team_project_access" "project_access" {
   count = var.team_name == "owners" ? 0 : 1
 
-  access       = "write"
-  team_id      = data.tfe_team.team.id
-  project_id   = tfe_project.project.id
+  access     = "write"
+  team_id    = data.tfe_team.team.id
+  project_id = tfe_project.project.id
 }
