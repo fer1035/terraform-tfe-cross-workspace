@@ -27,7 +27,7 @@ resource "tfe_team_access" "team_access" {
   depends_on = [tfe_workspace.workspace]
 }
 
-resource "tfe_run_trigger" "trigger_0_1" {
+resource "tfe_run_trigger" "run_trigger" {
   for_each = {
     for workspace_name, workspace in var.workspace_configurations : workspace_name => workspace
     if workspace.trigger_source != null
