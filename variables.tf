@@ -14,7 +14,7 @@ variable "project_name" {
 }
 
 variable "workspace_configurations" {
-  type        = map
+  type        = map(any)
   description = "Names and triggers of the Workspaces to create and / or manage."
 
   default = {
