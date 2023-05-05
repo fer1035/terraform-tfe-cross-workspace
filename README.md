@@ -2,7 +2,7 @@
 
 A Terraform module to create Workspaces that can trigger other Workspaces in a Project, with shared credentials. This needs to be run in an existing Workspace, which will govern the Project and Workspaces created by the module. Each Run Trigger will trigger Runs in the target Workspace when the source Workspace has completed Apply successfully.
 
-The workflow diagram shows a more complete design for a full deployment. This module creates a simpler implementation for demonmstration purposes.
+The workflow diagram shows a more complete design for a full deployment. This module creates a simpler implementation for demonstration purposes.
 
 ## Workflow
 
@@ -27,11 +27,205 @@ The workflow diagram shows a more complete design for a full deployment. This mo
     - Workspace 0 triggers Workspace 1
     - Workspace 1 triggers Workspace 2
 
+> The number of Workspaces, their names, and triggers can be customized by editing the **workspace_configurations** input map. Its default value is:
+
+> ```
+> {
+>   workspace_0 = {
+>     trigger_source = null
+>   }
+>   workspace_1 = {
+>     trigger_source = "workspace_0"
+>   }
+>   workspace_2 = {
+>     trigger_source = "workspace_1"
+>   }
+> }
+> ```
+
 ## How To Use The Module In Your Organization
 
 - Fork the [source repository](https://github.com/fer1035/terraform-tfe-cross-workspace) for this module.
 - Publish the Module in your Registry using the new repository as the source.
 - Customize the sample code in [examples](https://github.com/fer1035/terraform-tfe-cross-workspace/tree/main/examples) to call the module and create the resources.
+
+## Sample Implementation For A VCS-Driven Workflow
+
+- Module call to create the Terraform environment:
+
+    *main.tf*
+    ```
+    module "cross_workspace" {
+      source  = "app.terraform.io/my-org/cross-workspace/tfe"
+
+      org_name     = "my-org"
+      project_name = "cross_workspace"
+      varset_name  = "cross_workspace"
+    }
+
+    output "workspace" {
+      value = module.cross_workspace.workspace
+    }
+
+    ```
+
+- Workspace 0 code to configure parameters:
+
+    *main.tf*
+    ```
+    variable "parameters" {
+      default = {}
+    }
+
+    output "parameters" {
+      value = var.parameters
+    }
+
+    ```
+
+    *terraform.tfvars*
+    ```
+    parameters = {
+      bucket_1 = {
+        name          = "my-bucket-1"
+        force_destroy = true
+        tags = {
+          Name = "My bucket 1"
+          tier = "dev"
+        }
+      }
+      bucket_2 = {
+        name          = "my-bucket-2"
+        force_destroy = true
+        tags = {
+          Name = "My bucket 2"
+          tier = "dev"
+        }
+      }
+    }
+
+    ```
+
+- Workspace 1 code to be triggered by changes in Workspace 0:
+
+    *main.tf*
+    ```
+    resource "aws_s3_bucket" "bucket" {
+      for_each = local.buckets.parameters
+
+      bucket        = each.value.name
+      force_destroy = each.value.force_destroy
+      tags          = each.value.tags
+    }
+
+    output "bucket_names" {
+      value = {
+        for i, j in aws_s3_bucket.bucket : i => j.id
+      }
+    }
+
+    output "bucket_arns" {
+      value = {
+        for i, j in aws_s3_bucket.bucket : i => j.arn
+      }
+    }
+
+    output "bucket_tags" {
+      value = {
+        for i, j in aws_s3_bucket.bucket : i => j.tags
+      }
+    }
+
+    ```
+
+    *parameters.tf*
+    ```
+    data "tfe_outputs" "parameters" {
+      organization = "my-org"
+      workspace    = "workspace_0"
+    }
+
+    locals {
+      buckets = nonsensitive(data.tfe_outputs.parameters.values)
+    }
+
+    ```
+
+    *versions.tf*
+    ```
+    terraform {
+      required_version = "~> 1.0"
+      required_providers {
+        aws = {
+          source  = "hashicorp/aws"
+          version = "~> 4.0"
+        }
+        tfe = {
+          source  = "hashicorp/tfe"
+          version = "0.44.1"
+        }
+      }
+    }
+
+    provider "aws" {
+      region = "us-east-1"
+    }
+
+    ```
+
+- Workspace 2 code to be triggered by changes in Workspace 1:
+
+    *main.tf*
+    ```
+    resource "aws_s3_bucket" "triggered" {
+      for_each = local.buckets.bucket_names
+
+      bucket        = "triggered-${each.value}"
+      force_destroy = true
+    }
+
+    output "bucket_names" {
+      value = {
+        for i, j in aws_s3_bucket.triggered : i => j.id
+      }
+    }
+
+    ```
+
+    *parameters.tf*
+    ```
+    data "tfe_outputs" "triggered" {
+      organization = "my-org"
+      workspace    = "workspace_1"
+    }
+
+    locals {
+      buckets = nonsensitive(data.tfe_outputs.triggered.values)
+    }
+
+    ```
+
+    *versions.tf*
+    ```
+    terraform {
+      required_version = "~> 1.0"
+      required_providers {
+        aws = {
+          source  = "hashicorp/aws"
+          version = "~> 4.0"
+        }
+        tfe = {
+          source  = "hashicorp/tfe"
+          version = "0.44.1"
+        }
+      }
+    }
+
+    provider "aws" {
+      region = "us-east-1"
+    }
+
+    ```
 
 ---
 
@@ -58,7 +252,7 @@ No modules.
 |------|------|
 | [tfe_project.project](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/project) | resource |
 | [tfe_project_variable_set.project_variable_set](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/project_variable_set) | resource |
-| [tfe_run_trigger.trigger_0_1](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/run_trigger) | resource |
+| [tfe_run_trigger.run_trigger](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/run_trigger) | resource |
 | [tfe_team_access.team_access](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/team_access) | resource |
 | [tfe_team_project_access.project_access](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/team_project_access) | resource |
 | [tfe_workspace.workspace](https://registry.terraform.io/providers/hashicorp/tfe/0.44.1/docs/resources/workspace) | resource |
@@ -73,7 +267,7 @@ No modules.
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Name of the Project to create and / or manage. | `string` | n/a | yes |
 | <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Name of an existing Team to assign to the Workspaces. The default "owners" Team does not need Team Access assignments, and this condition has been configured automatically in the code. | `string` | `"owners"` | no |
 | <a name="input_varset_name"></a> [varset\_name](#input\_varset\_name) | Name of an existing Variable Set to use. | `string` | n/a | yes |
-| <a name="input_workspace_configurations"></a> [workspace\_configurations](#input\_workspace\_configurations) | Names and triggers of the Workspaces to create and / or manage. | `map` | <pre>{<br>  "workspace_0": {<br>    "trigger_source": null<br>  },<br>  "workspace_1": {<br>    "trigger_source": "workspace_0"<br>  },<br>  "workspace_2": {<br>    "trigger_source": "workspace_1"<br>  }<br>}</pre> | no |
+| <a name="input_workspace_configurations"></a> [workspace\_configurations](#input\_workspace\_configurations) | Names and triggers of the Workspaces to create and / or manage. | `map(any)` | <pre>{<br>  "workspace_0": {<br>    "trigger_source": null<br>  },<br>  "workspace_1": {<br>    "trigger_source": "workspace_0"<br>  },<br>  "workspace_2": {<br>    "trigger_source": "workspace_1"<br>  }<br>}</pre> | no |
 
 ## Outputs
 
