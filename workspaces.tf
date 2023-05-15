@@ -14,6 +14,19 @@ resource "tfe_workspace" "workspace" {
   }
 }
 
+/* resource "tfe_team_access" "team_access" {
+  for_each = {
+    for workspace_name, workspace in tfe_workspace.workspace : workspace_name => workspace
+    if var.team_name != "owners"
+  }
+
+  access       = "write"
+  team_id      = data.tfe_team.team.id
+  workspace_id = tfe_workspace.workspace["${each.key}"].id
+
+  depends_on = [tfe_workspace.workspace]
+} */
+
 resource "tfe_run_trigger" "run_trigger" {
   for_each = {
     for workspace_name, workspace in var.workspace_configurations : workspace_name => workspace
