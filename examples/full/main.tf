@@ -1,11 +1,19 @@
 module "cross-workspace" {
   source  = "app.terraform.io/my-org/cross-workspace/tfe"
-  version = "1.2.1"
+  version = "1.3.0"
 
   org_name         = "my-org"
   project_name     = "my-project"
-  varset_name      = "my-variables"
-  team_name        = "my-team"
+
+  variable_sets = [
+    "my_credentials_1",
+    "my_credentials_2"
+  ]
+
+  teams = {
+    my_engineers = "write"
+    my_users     = "read"
+  }
 
   workspace_configurations = {
     workspace_0 = {
