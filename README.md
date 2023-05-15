@@ -58,7 +58,6 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
       org_name     = "my-org"
       project_name = "cross_workspace"
-      varset_name  = "cross_workspace"
     }
 
     output "workspace" {
