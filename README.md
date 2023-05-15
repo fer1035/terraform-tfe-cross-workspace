@@ -17,7 +17,7 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
 ## What The Module Creates By Default
 
-- 1 Project assigned to the ***owners*** team with no Variable Set, containing
+- 1 Project assigned to the ***owners*** team, containing
     - 3 Workspaces with Write permission to the specified Team
         - Workspace 0
         - Workspace 1
