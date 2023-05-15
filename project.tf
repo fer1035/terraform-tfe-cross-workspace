@@ -25,8 +25,8 @@ resource "tfe_project_variable_set" "project_variable_set" {
 
 data "tfe_team" "team" {
   for_each = {
-    for team, team_name in var.teams : team => team_name
-    if var.teams.team != null
+    for team_name, team in var.teams : team_name => team
+    if team["${team_name}"] != null
   }
 
   name         = each.key
@@ -35,11 +35,11 @@ data "tfe_team" "team" {
 
 resource "tfe_team_project_access" "project_access" {
   for_each = {
-    for team, team_name in data.tfe_team.team : team => team_name
-    if var.teams.team != null
+    for team_name, team in data.tfe_team.team : team_name => team
+    if team["${team_name}"] != null
   }
 
-  access     = var.teams["${each.key}"]
+  access     = team["${team_name}"]
   team_id    = each.value.id
   project_id = tfe_project.project.id
 }

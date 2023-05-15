@@ -17,7 +17,7 @@ resource "tfe_workspace" "workspace" {
 resource "tfe_run_trigger" "run_trigger" {
   for_each = {
     for workspace_name, workspace in var.workspace_configurations : workspace_name => workspace
-    if workspace_name.trigger_source != null
+    if workspace.trigger_source != null
   }
 
   workspace_id  = tfe_workspace.workspace["${each.key}"].id
