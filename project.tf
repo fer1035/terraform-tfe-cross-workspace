@@ -36,10 +36,10 @@ data "tfe_team" "team" {
 resource "tfe_team_project_access" "project_access" {
   for_each = {
     for team_name, team in data.tfe_team.team : team_name => team
-    if var.teams["${team_name}"].access != null
+    if var.teams["${each.key}"].access != null
   }
 
-  access     = var.teams["${team_name}"].access
+  access     = var.teams["${each.key}"].access
   team_id    = each.value.id
   project_id = tfe_project.project.id
 }
