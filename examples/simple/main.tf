@@ -3,7 +3,6 @@ module "cross-workspace" {
 
   org_name         = "my-org"
   project_name     = "my-project"
-  varset_name      = "my-variables"
 }
 
 output "my-workspaces" {

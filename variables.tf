@@ -3,11 +3,6 @@ variable "org_name" {
   description = "Name of an existing Organization to use."
 }
 
-variable "varset_name" {
-  type        = string
-  description = "Name of an existing Variable Set to use."
-}
-
 variable "project_name" {
   type        = string
   description = "Name of the Project to create and / or manage."
@@ -30,8 +25,28 @@ variable "workspace_configurations" {
   }
 }
 
-variable "team_name" {
-  type        = string
-  description = "Name of an existing Team to assign to the Workspaces. The default \"owners\" Team does not need Team Access assignments, and this condition has been configured automatically in the code."
-  default     = "owners"
+variable "variable_sets" {
+  type        = list(string)
+  description = "Variable Sets to assign to the Project to create and / or manage."
+
+  default = null
+
+  /* default = [
+    "credentials_0",
+    "credentials_1"
+  ] */
+}
+
+variable "teams" {
+  type        = map(any)
+  description = "Names and permissions of the Teams for the Project to create and / or manage."
+
+  default = null
+
+  /* default = {
+    owners      = "admin"
+    maintainers = "maintain"
+    engineers   = "wrute"
+    users       = "read"
+  } */
 }
