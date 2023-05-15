@@ -41,11 +41,21 @@ variable "teams" {
   type        = map(any)
   description = "Names and permissions of the Teams for the Project to create and / or manage."
 
-  default = { owners = null }
+  default = {
+    owners = {
+      access = null
+    }
+  }
 
   /* default = {
-    maintainers = "maintain"
-    engineers   = "wrute"
-    users       = "read"
+    maintainers = {
+      access = "maintain"
+    }
+    engineers = {
+      access = "write"
+    }
+    users = {
+      access = "read"
+    }
   } */
 }
