@@ -29,8 +29,6 @@ variable "variable_sets" {
   type        = list(string)
   description = "Variable Sets to assign to the Project to create and / or manage."
 
-  default = null
-
   /* default = [
     "credentials_0",
     "credentials_1"
@@ -41,12 +39,10 @@ variable "teams" {
   type        = map(any)
   description = "Names and permissions of the Teams for the Project to create and / or manage."
 
-  default = null
-
-  /* default = {
-    owners      = "admin"
-    maintainers = "maintain"
+  default = {
+    owners = "admin"
+    /* maintainers = "maintain"
     engineers   = "wrute"
-    users       = "read"
-  } */
+    users       = "read" */
+  }
 }
