@@ -6,5 +6,5 @@ module "cross-workspace" {
 }
 
 output "my-workspaces" {
-  value = module.cross-workspace.workspace
+  value = module.cross-workspace.workspaces
 }
