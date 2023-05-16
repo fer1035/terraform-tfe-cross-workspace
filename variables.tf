@@ -29,10 +29,11 @@ variable "variable_sets" {
   type        = list(string)
   description = "Variable Sets to assign to the Project to create and / or manage."
 
-  /* default = [
-    "credentials_0",
-    "credentials_1"
-  ] */
+  default = [
+    /* "credentials_0",
+    "credentials_1", */
+    null
+  ]
 }
 
 variable "teams" {
@@ -40,9 +41,9 @@ variable "teams" {
   description = "Names and permissions of the Teams for the Project to create and / or manage."
 
   default = {
-    owners = "admin"
     /* maintainers = "maintain"
     engineers   = "wrute"
     users       = "read" */
+    owners = "admin"
   }
 }
