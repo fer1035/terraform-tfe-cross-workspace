@@ -6,7 +6,7 @@ resource "tfe_project" "project" {
 data "tfe_variable_set" "variable_set" {
   for_each = {
     for set, var_set in toset(var.variable_sets) : set => var_set
-    if var.variable_sets != null
+    if var_set != null
   }
 
   name         = each.key
@@ -16,7 +16,7 @@ data "tfe_variable_set" "variable_set" {
 resource "tfe_project_variable_set" "project_variable_set" {
   for_each = {
     for set, var_set in data.tfe_variable_set.variable_set : set => var_set
-    if var.variable_sets != null
+    if var_set != null
   }
 
   variable_set_id = each.value.id
