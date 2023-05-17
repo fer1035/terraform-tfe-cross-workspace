@@ -8,42 +8,20 @@ variable "project_name" {
   description = "Name of the Project to create and / or manage."
 }
 
-variable "workspace_configurations" {
-  type        = map(any)
-  description = "Names and triggers of the Workspaces to create and / or manage."
-
-  default = {
-    workspace_0 = {
-      trigger_source = null
-    }
-    workspace_1 = {
-      trigger_source = "workspace_0"
-    }
-    workspace_2 = {
-      trigger_source = "workspace_1"
-    }
-  }
-}
-
 variable "variable_sets" {
   type        = list(string)
-  description = "Variable Sets to assign to the Project to create and / or manage."
-
-  default = [
-    /* "credentials_0",
-    "credentials_1", */
-    null
-  ]
+  description = "Variable Sets to assign to the Project to create and / or manage. See documentation for example definition."
+  default     = []
 }
 
 variable "teams" {
   type        = map(any)
-  description = "Names and permissions of the Teams for the Project to create and / or manage."
+  description = "Names and permissions of the Teams for the Project to create and / or manage. See documentation for example definition."
+  default     = {}
+}
 
-  default = {
-    /* maintainers = "maintain"
-    engineers   = "wrute"
-    users       = "read" */
-    owners = "admin"
-  }
+variable "workspace_configurations" {
+  type        = map(any)
+  description = "Names and triggers of the Workspaces to create and / or manage. See documentation for example definition."
+  default     = {}
 }

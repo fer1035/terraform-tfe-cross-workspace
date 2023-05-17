@@ -2,8 +2,6 @@
 
 A Terraform module to create Workspaces that can trigger other Workspaces in a Project, with shared credentials. This needs to be run in an existing Workspace, which will govern the Project and Workspaces created by the module. Each Run Trigger will trigger Runs in the target Workspace when the source Workspace has completed Apply successfully.
 
-The workflow diagram shows a more complete design for a full deployment. This module creates a simpler implementation for demonstration purposes.
-
 ## Workflow
 
 ![Full design workflow](https://raw.githubusercontent.com/fer1035/terraform-tfe-cross-workspace/main/images/cross_workspace.png "Full design workflow")
@@ -14,32 +12,44 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 - An existing Workspace in which to run the module.
 - A **TFE_TOKEN** environment variable in the existing Workspace with sufficient privileges to manage all of the components described here.
 
-## What The Module Creates By Default
+## Example Definitions
 
-- 1 Project with no Variable Set, containing
-    - 3 Workspaces with Write permission to the specified Team
-        - Workspace 0
-        - Workspace 1
-        - Workspace 2
-- Run Triggers
-    - Workspace 0 triggers Workspace 1
-    - Workspace 1 triggers Workspace 2
+By default, the module deploys 1 Project with no Variable Set, no Team assignment, and no Workspace.
 
-> The number of Workspaces, their names, and triggers can be customized by editing the **workspace_configurations** input map. Its default value is:
+- To assign Variable Sets to the Project
 
-> ```
-> {
->   workspace_0 = {
->     trigger_source = null
->   }
->   workspace_1 = {
->     trigger_source = "workspace_0"
->   }
->   workspace_2 = {
->     trigger_source = "workspace_1"
->   }
-> }
-> ```
+    ```
+    variable_sets = [
+      "credentials_0",
+      "credentials_1"
+    ]
+    ```
+
+- To assign Teams and their access levels to the Project
+
+    ```
+    teams = {
+      maintainers = "maintain"
+      engineers   = "write"
+      users       = "read"
+    }
+    ```
+
+- To define Workspaces and their Run Trigger source Workspaces (***null*** means no trigger)
+
+    ```
+    workspace_configurations = {
+      workspace_0 = {
+        trigger_source = null
+      }
+      workspace_1 = {
+        trigger_source = "workspace_0"
+      }
+      workspace_2 = {
+        trigger_source = "workspace_1"
+      }
+    }
+    ```
 
 ## How To Use The Module In Your Organization
 
@@ -58,6 +68,18 @@ The workflow diagram shows a more complete design for a full deployment. This mo
 
       org_name     = "my-org"
       project_name = "my-project"
+
+      workspace_configurations = {
+        workspace_0 = {
+          trigger_source = null
+        }
+        workspace_1 = {
+          trigger_source = "workspace_0"
+        }
+        workspace_2 = {
+          trigger_source = "workspace_1"
+        }
+      }
     }
 
     output "my-workspaces" {
@@ -261,12 +283,12 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_org_name"></a> [org\_name](#input\_org\_name) | Name of an existing Organization to use. | `string` | n/a | yes |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Name of the Project to create and / or manage. | `string` | n/a | yes |
-| <a name="input_teams"></a> [teams](#input\_teams) | Names and permissions of the Teams for the Project to create and / or manage. | `map(any)` | <pre>{<br>  "owners": "admin"<br>}</pre> | no |
-| <a name="input_variable_sets"></a> [variable\_sets](#input\_variable\_sets) | Variable Sets to assign to the Project to create and / or manage. | `list(string)` | <pre>[<br>  null<br>]</pre> | no |
-| <a name="input_workspace_configurations"></a> [workspace\_configurations](#input\_workspace\_configurations) | Names and triggers of the Workspaces to create and / or manage. | `map(any)` | <pre>{<br>  "workspace_0": {<br>    "trigger_source": null<br>  },<br>  "workspace_1": {<br>    "trigger_source": "workspace_0"<br>  },<br>  "workspace_2": {<br>    "trigger_source": "workspace_1"<br>  }<br>}</pre> | no |
+| <a name="input_teams"></a> [teams](#input\_teams) | Names and permissions of the Teams for the Project to create and / or manage. See documentation for example definition. | `map(any)` | `{}` | no |
+| <a name="input_variable_sets"></a> [variable\_sets](#input\_variable\_sets) | Variable Sets to assign to the Project to create and / or manage. See documentation for example definition. | `list(string)` | `[]` | no |
+| <a name="input_workspace_configurations"></a> [workspace\_configurations](#input\_workspace\_configurations) | Names and triggers of the Workspaces to create and / or manage. See documentation for example definition. | `map(any)` | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_workspaces"></a> [workspaces](#output\_workspaces) | Workspace data (map). |
+| <a name="output_environment"></a> [environment](#output\_environment) | Environment data (map). |
