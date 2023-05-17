@@ -8,6 +8,14 @@ resource "tfe_workspace" "workspace" {
 
   lifecycle {
     ignore_changes = [
+      agent_pool_id,
+      auto_apply,
+      description,
+      execution_mode,
+      force_delete,
+      operations,
+      queue_all_runs,
+      trigger_patterns,
       working_directory,
       vcs_repo
     ]
