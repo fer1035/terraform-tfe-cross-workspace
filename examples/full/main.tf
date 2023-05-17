@@ -1,6 +1,6 @@
 module "cross-workspace" {
   source  = "app.terraform.io/my-org/cross-workspace/tfe"
-  version = "1.4.1"
+  version = "1.4.2"
 
   org_name         = "my-org"
   project_name     = "my-project"
