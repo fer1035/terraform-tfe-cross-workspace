@@ -41,12 +41,15 @@ By default, the module deploys 1 Project with no Variable Set, no Team assignmen
     workspace_configurations = {
       workspace_0 = {
         trigger_source = null
+        tags           = ["mytag-1", "mytag-2"]
       }
       workspace_1 = {
         trigger_source = "workspace_0"
+        tags           = ["mytag-1", "mytag-b"]
       }
       workspace_2 = {
         trigger_source = "workspace_1"
+        tags           = ["mytag-a", "mytag-b"]
       }
     }
     ```
