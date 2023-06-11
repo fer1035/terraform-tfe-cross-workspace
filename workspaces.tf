@@ -5,6 +5,7 @@ resource "tfe_workspace" "workspace" {
   organization = var.org_name
   project_id   = tfe_project.project.id
   auto_apply   = true
+  tag_names    = each.value.tags
 
   lifecycle {
     ignore_changes = all
